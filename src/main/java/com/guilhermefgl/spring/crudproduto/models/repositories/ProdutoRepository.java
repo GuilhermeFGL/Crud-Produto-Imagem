@@ -12,13 +12,13 @@ import com.guilhermefgl.spring.crudproduto.models.Produto;
 
 @Transactional(readOnly = true)
 @NamedQueries({
-	@NamedQuery(name = "ProdutoRepository.findAllChildsByIdProduto",
-			query = "SELECT prd FROM Produto prd WHERE prd.idProdutoPai = :idProdutoPai") })
+	@NamedQuery(name = "ProdutoRepository.findSonsByIdProdutoPai",
+			query = "SELECT * FROM Produto prd WHERE prd.idProdutoPai = :idProdutoPai") })
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 	
 	List<Produto> findAll();
 	
-	List<Produto> findChildsByIdProduto(@Param("idProduto") Integer idProdutoPai);
+	List<Produto> findSonsByIdProduto(@Param("idProdutoPai") Integer idProdutoPai);
 	
 	Produto findByIdProduto(Integer idProduto);
 

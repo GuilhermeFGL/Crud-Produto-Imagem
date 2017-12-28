@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.guilhermefgl.spring.crudproduto.models.Imagem;
 import com.guilhermefgl.spring.crudproduto.models.Produto;
@@ -12,6 +13,7 @@ import com.guilhermefgl.spring.crudproduto.models.dao.ImagemDAO;
 import com.guilhermefgl.spring.crudproduto.models.repositories.ImagemRepository;
 import com.guilhermefgl.spring.crudproduto.models.repositories.ProdutoRepository;
 
+@Service
 public class ImagemService implements ImagemDAO {
 	
 	@Autowired

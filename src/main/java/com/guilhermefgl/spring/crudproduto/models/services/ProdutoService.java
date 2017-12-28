@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Service;
 
 import com.guilhermefgl.spring.crudproduto.models.Produto;
 import com.guilhermefgl.spring.crudproduto.models.dao.ProdutoDAO;
 import com.guilhermefgl.spring.crudproduto.models.repositories.ProdutoRepository;
 
+@Service
+@Configurable
 public class ProdutoService implements ProdutoDAO {
 	
 	@Autowired
@@ -25,8 +29,8 @@ public class ProdutoService implements ProdutoDAO {
 	}
 
 	@Override
-	public List<Produto> listChildrenProducts(Integer idProdutoPai) {
-		return produtoRepository.findChildsByIdProduto(idProdutoPai);
+	public List<Produto> listSonsProducts(Integer idProdutoPai) {
+		return produtoRepository.findSonsByIdProduto(idProdutoPai);
 	}
 
 	@Override

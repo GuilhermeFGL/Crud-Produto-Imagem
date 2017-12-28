@@ -51,18 +51,5 @@ public class ProdutoRepositoryTest {
 		List<Produto> produtos = produtoRepository.findAll();
 		assertEquals(2, produtos.size());
 	}
-	
-	@Test
-	public void findByIdProduto() {
-		Produto produto = produtoRepository.findByIdProduto(2);
-		assertEquals(PRODUTO_NOME, produto.getNome());
-		
-		Produto produtoFilho = produtoRepository.findByIdProduto(3);
-		assertEquals(PRODUTO_NOME_FILHO, produtoFilho.getNome());
-		assertEquals(PRODUTO_NOME, produtoFilho.getProdutoPai().getNome());
-		
-		List<Produto> produtosFilhos = produtoRepository.findChildsByIdProduto(2);
-		assertEquals(1, produtosFilhos.size());
-	}
 
 }

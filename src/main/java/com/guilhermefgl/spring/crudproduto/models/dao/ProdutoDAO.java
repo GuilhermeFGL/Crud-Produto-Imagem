@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.guilhermefgl.spring.crudproduto.models.Produto;
-import com.guilhermefgl.spring.crudproduto.models.services.ProdutoService;
 
 public interface ProdutoDAO {
 
@@ -24,12 +23,12 @@ public interface ProdutoDAO {
 	List<Produto> listProducts();
 	
 	/*
-	 * List all children products from a father product id
+	 * List all sons products from a parent product id
 	 * 
 	 * @param idProdutoPai
 	 * @return List<Produto>
 	 */
-	List<Produto> listChildrenProducts(Integer idProdutoPai);
+	List<Produto> listSonsProducts(Integer idProdutoPai);
 	
 	/*
 	 * Persist product object
@@ -45,13 +44,4 @@ public interface ProdutoDAO {
 	 * @param produtoId
 	 */
 	void delete(Integer produtoId);
-	
-	/*
-	 * DAO Factory
-	 * 
-	 * @return ProdutoServiceDAO
-	 */
-	public static ProdutoDAO getService() {
-		return new ProdutoService();
-	}
 }

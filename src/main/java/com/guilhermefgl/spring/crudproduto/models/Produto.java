@@ -38,16 +38,21 @@ public class Produto implements Serializable {
 	private Produto produtoPai;
 	
 	@OneToMany(mappedBy = "produto", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Imagem> imagens;
-	
-	public Produto() {}
-	
+	private List<Imagem> imagens;	
 	
 	/**
 	 * @return the idProduto
 	 */
 	public Integer getIdProduto() {
 		return idProduto;
+	}
+	
+	/**
+	 * @return the optional produtoPai
+	 */
+	@Transient
+	public Optional<Integer> getIdProdutoOpt() {
+		return Optional.ofNullable(idProduto);
 	}
 
 	/**
