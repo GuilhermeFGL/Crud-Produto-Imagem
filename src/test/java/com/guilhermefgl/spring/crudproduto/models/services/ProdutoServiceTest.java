@@ -35,7 +35,7 @@ public class ProdutoServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		BDDMockito.given(produtoRepository.findAll()).willReturn(new ArrayList<Produto>());
-		BDDMockito.given(produtoRepository.findSonsByIdProduto(Mockito.anyInt())).willReturn(new ArrayList<Produto>());
+		BDDMockito.given(produtoRepository.findByProdutoPai(Mockito.any(Produto.class))).willReturn(new ArrayList<Produto>());
 		BDDMockito.given(produtoRepository.findByIdProduto(Mockito.anyInt())).willReturn(new Produto());
 		BDDMockito.given(produtoRepository.save(Mockito.any(Produto.class))).willReturn(new Produto());
 	}
@@ -54,7 +54,7 @@ public class ProdutoServiceTest {
 	
 	@Test
 	public void listSonsProductsTest() {
-		List<Produto> produtos = produtoService.listSonsProducts(Mockito.anyInt());
+		List<Produto> produtos = produtoService.listSonsProducts(Mockito.any(Produto.class));
 		assertNotNull(produtos);
 	}
 	

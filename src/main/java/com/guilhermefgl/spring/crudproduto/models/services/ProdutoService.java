@@ -29,8 +29,8 @@ public class ProdutoService implements ProdutoDAO {
 	}
 
 	@Override
-	public List<Produto> listSonsProducts(Integer idProdutoPai) {
-		return produtoRepository.findSonsByIdProduto(idProdutoPai);
+	public List<Produto> listSonsProducts(Produto produtoPai) {
+		return produtoRepository.findByProdutoPai(produtoPai);
 	}
 
 	@Override

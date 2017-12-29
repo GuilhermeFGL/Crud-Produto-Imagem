@@ -25,10 +25,10 @@ public interface ProdutoDAO {
 	/*
 	 * List all sons products from a parent product id
 	 * 
-	 * @param idProdutoPai
+	 * @param Produto
 	 * @return List<Produto>
 	 */
-	List<Produto> listSonsProducts(Integer idProdutoPai);
+	List<Produto> listSonsProducts(Produto produtoPai);
 	
 	/*
 	 * Persist product object

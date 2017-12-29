@@ -2,6 +2,7 @@ package com.guilhermefgl.spring.crudproduto.controllers;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -141,11 +142,17 @@ public class ProdutoController {
 	public ResponseEntity<Response<List<ProdutoDTO>>> getWithSons(@PathVariable("id") Integer produtoPaiId) {
 		Response<List<ProdutoDTO>> response = new Response<List<ProdutoDTO>>();
 		List<ProdutoDTO> produtosDTO = new ArrayList<ProdutoDTO>();
-		produtoService.listSonsProducts(produtoPaiId).forEach(
-				produto -> produtosDTO.add(new ProdutoDTO().createProdutoDTO(produto)));
-
-		response.setData(produtosDTO);
-		return ResponseEntity.ok(response);
+		
+		Optional<Produto> produtoPai = produtoService.getProduct(produtoPaiId);
+		if(produtoPai.isPresent()) {
+			produtoService.listSonsProducts(produtoPai.get()).forEach(
+					produto -> produtosDTO.add(new ProdutoDTO().createProdutoDTO(produto)));
+			response.setData(produtosDTO);
+			return ResponseEntity.ok(response);
+		} else {
+			response.setErrors(Arrays.asList("Produto pai não encontrado"));
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 	
 	/**
