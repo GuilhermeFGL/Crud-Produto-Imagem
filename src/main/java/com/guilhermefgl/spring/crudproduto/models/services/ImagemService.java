@@ -21,6 +21,16 @@ public class ImagemService implements ImagemDAO {
 	
 	@Autowired
 	private ImagemRepository imagemRepository;
+	
+	@Override
+	public Optional<Imagem> getImagem(Integer imagemId) {
+		return Optional.ofNullable(imagemRepository.findByIdImagem(imagemId));
+	}
+	
+	@Override
+	public List<Imagem> listImagens() {
+		return imagemRepository.findAll();
+	}
 
 	@Override
 	public List<Imagem> listProdutoImages(Integer produtoId) {

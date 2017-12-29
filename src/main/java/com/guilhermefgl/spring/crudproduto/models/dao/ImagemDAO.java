@@ -1,11 +1,26 @@
 package com.guilhermefgl.spring.crudproduto.models.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.guilhermefgl.spring.crudproduto.models.Imagem;
-import com.guilhermefgl.spring.crudproduto.models.services.ImagemService;
 
 public interface ImagemDAO {
+	
+	/*
+	 * GET imagem
+	 * 
+	 * @param imagemId
+	 * @return Imagem
+	 */
+	Optional<Imagem> getImagem(Integer imagemId);
+	
+	/*
+	 * List Imagens
+	 * 
+	 * @return List<Imagem>
+	 */
+	List<Imagem> listImagens();
 
 	/*
 	 * List Imagens from Produto id
@@ -29,14 +44,5 @@ public interface ImagemDAO {
 	 * @param Imagem
 	 */
 	void delete(Integer Imagem);
-	
-	/*
-	 * DAO Factory
-	 * 
-	 * @return ImagemServiceContract
-	 */
-	public static ImagemDAO getService() {
-		return new ImagemService();
-	}
 	
 }

@@ -130,7 +130,6 @@ public class ProdutoDTO {
 	/*
 	 * Create Produto DTO object from model
 	 * 
-	 * @param ProdutoDTO
 	 * @param Produto
 	 * @return ProdutoDTO
 	 */
@@ -146,7 +145,6 @@ public class ProdutoDTO {
 	/*
 	 * Create ProdutoPai DTO object from model
 	 * 
-	 * @param ProdutoDTO
 	 * @param Produto
 	 * @return ProdutoDTO
 	 */

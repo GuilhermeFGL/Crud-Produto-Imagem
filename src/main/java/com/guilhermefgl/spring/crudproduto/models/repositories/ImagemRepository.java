@@ -17,6 +17,10 @@ import com.guilhermefgl.spring.crudproduto.models.Produto;
 			query = "SELECT img FROM Imagem img WHERE img.produto = :produto") })
 public interface ImagemRepository extends JpaRepository<Imagem, Integer> { 
 	
+	Imagem findByIdImagem(Integer idImagem);
+	
+	List<Imagem> findAll();
+	
 	List<Imagem> findByProduto(@Param("produto") Produto produto);
 	
 }

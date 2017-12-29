@@ -1,6 +1,7 @@
 package com.guilhermefgl.spring.crudproduto.models;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "imagem")
@@ -32,6 +34,14 @@ public class Imagem implements Serializable {
 	 */
 	public Integer getIdImagem() {
 		return idImagem;
+	}
+	
+	/**
+	 * @return the optional idImagem
+	 */
+	@Transient
+	public Optional<Integer> getIdImagemOpt() {
+		return Optional.ofNullable(idImagem);
 	}
 
 	/**
@@ -60,6 +70,14 @@ public class Imagem implements Serializable {
 	 */
 	public Produto getProduto() {
 		return produto;
+	}
+	
+	/**
+	 * @return the optional produto
+	 */
+	@Transient
+	public Optional<Produto> getProdutoOpt() {
+		return Optional.ofNullable(produto);
 	}
 
 	/**

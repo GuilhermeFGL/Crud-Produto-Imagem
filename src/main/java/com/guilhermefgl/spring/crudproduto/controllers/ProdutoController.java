@@ -160,7 +160,7 @@ public class ProdutoController {
 	 * 
 	 * @param id
 	 * @param ProdutoDTO
-	 * @return ResponseEntity<Response<Produto>>
+	 * @return ResponseEntity<Response<ProdutoDTO>>
 	 * @throws ParseException 
 	 */
 	@PutMapping(value = "/{id}")
@@ -191,7 +191,7 @@ public class ProdutoController {
 	 * DELETE produto
 	 * 
 	 * @param id
-	 * @return ResponseEntity<Response<Produto>>
+	 * @return ResponseEntity
 	 */
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Response<String>> remover(@PathVariable("id") Integer idProduto) {
