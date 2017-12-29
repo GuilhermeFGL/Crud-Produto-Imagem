@@ -46,14 +46,14 @@ public class ProdutoController {
 	public ResponseEntity<Response<ProdutoDTO>> save(@Valid @RequestBody ProdutoDTO produtoDTO, BindingResult result)
 			throws ParseException {
 		Response<ProdutoDTO> response = new Response<ProdutoDTO>();
-		Produto produto = toModel(produtoDTO, result);
+		Produto produto = produtoDTO.toModel(produtoService, result);
 
 		if (result.hasErrors()) {
 			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
 			return ResponseEntity.badRequest().body(response);
 		} else {
 			produto = produtoService.save(produto);
-			response.setData(createProdutoDTO(new ProdutoDTO(), produto));
+			response.setData(new ProdutoDTO().createProdutoDTO(produto));
 			return ResponseEntity.ok(response);
 		}
 	}
@@ -67,7 +67,7 @@ public class ProdutoController {
 	public ResponseEntity<Response<List<ProdutoDTO>>> list() {
 		Response<List<ProdutoDTO>> response = new Response<List<ProdutoDTO>>();
 		List<ProdutoDTO> produtosDTO = new ArrayList<ProdutoDTO>();
-		produtoService.listProducts().forEach(produto -> produtosDTO.add(createProdutoDTO(new ProdutoDTO(), produto)));
+		produtoService.listProducts().forEach(produto -> produtosDTO.add(new ProdutoDTO().createProdutoDTO(produto)));
 
 		response.setData(produtosDTO);
 		return ResponseEntity.ok(response);
@@ -84,8 +84,7 @@ public class ProdutoController {
 		List<ProdutoDTO> produtosDTO = new ArrayList<ProdutoDTO>();
 		produtoService.listProducts().forEach(produto -> {
 			ProdutoDTO produtoDTO = new ProdutoDTO();
-			createProdutoDTO(produtoDTO, produto);
-			createProdutoPaiDTO(produtoDTO, produto);
+			produtoDTO.createProdutoDTO(produto).createProdutoPaiDTO(produto);
 			produtosDTO.add(produtoDTO);
 		});
 
@@ -107,7 +106,7 @@ public class ProdutoController {
 			response.getErrors().add("Produto não encontrado");
 			return ResponseEntity.badRequest().body(response);
 		} else {
-			response.setData(createProdutoDTO(new ProdutoDTO(), produto.get()));
+			response.setData(new ProdutoDTO().createProdutoDTO(produto.get()));
 			return ResponseEntity.ok(response);
 		}
 	}
@@ -126,9 +125,7 @@ public class ProdutoController {
 			response.getErrors().add("Produto não encontrado");
 			return ResponseEntity.badRequest().body(response);
 		} else {
-			ProdutoDTO produtoDTO = new ProdutoDTO();
-			createProdutoDTO(produtoDTO, produto.get());
-			createProdutoPaiDTO(produtoDTO, produto.get());
+			ProdutoDTO produtoDTO = new ProdutoDTO().createProdutoDTO(produto.get()).createProdutoPaiDTO(produto.get());
 			response.setData(produtoDTO);
 			return ResponseEntity.ok(response);
 		}
@@ -145,7 +142,7 @@ public class ProdutoController {
 		Response<List<ProdutoDTO>> response = new Response<List<ProdutoDTO>>();
 		List<ProdutoDTO> produtosDTO = new ArrayList<ProdutoDTO>();
 		produtoService.listSonsProducts(produtoPaiId).forEach(
-				produto -> produtosDTO.add(createProdutoDTO(new ProdutoDTO(), produto)));
+				produto -> produtosDTO.add(new ProdutoDTO().createProdutoDTO(produto)));
 
 		response.setData(produtosDTO);
 		return ResponseEntity.ok(response);
@@ -164,7 +161,7 @@ public class ProdutoController {
 			@PathVariable("id") Integer id, @Valid @RequestBody ProdutoDTO produtoDTO, BindingResult result) throws ParseException {
 		Response<ProdutoDTO> response = new Response<ProdutoDTO>();
 		produtoDTO.setIdProduto(id);
-		Produto produto = toModel(produtoDTO, result);
+		Produto produto = produtoDTO.toModel(produtoService, result);
 		
 		if (produtoDTO.getProdutoPai() != null) {
 			Optional<Produto> produtoPai = produtoService.getProduct(produtoDTO.getProdutoPai().getIdProduto());
@@ -179,7 +176,7 @@ public class ProdutoController {
 		}
 
 		produto = produtoService.save(produto);
-		response.setData(createProdutoDTO(new ProdutoDTO(), produto));
+		response.setData(new ProdutoDTO().createProdutoDTO(produto));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -201,78 +198,6 @@ public class ProdutoController {
 
 		produtoService.delete(idProduto);
 		return ResponseEntity.ok(new Response<String>());
-	}
-
-	/*
-	 * Convert DTO to model class
-	 * 
-	 * @param ProdutoDTO
-	 * @param BindingResult
-	 * @return Produto
-	 * @throws ParseException
-	 */
-	private Produto toModel(ProdutoDTO produtoDTO, BindingResult result) throws ParseException {
-		Produto produto = new Produto();
-
-		if (produtoDTO.getIdProduto() != null) {
-			Optional<Produto> produtoOpt = produtoService.getProduct(produtoDTO.getIdProduto());
-			if (produtoOpt.isPresent()) {
-				produto = produtoOpt.get();
-			} else {
-				result.addError(new ObjectError("produto", "Produto não encontrado."));
-			}
-		}
-
-		if (produtoDTO.getProdutoPai() != null) {
-			Optional<Produto> produtoOpt = produtoService.getProduct(produtoDTO.getProdutoPai().getIdProduto());
-			if (produtoOpt.isPresent()) {
-				produto.setProdutoPai(produtoOpt.get());
-			} else {
-				result.addError(new ObjectError("produto", "Produto pai não encontrado."));
-			}
-		}
-		
-		produto.setNome(produtoDTO.getNome());
-		produto.setDescricao(produtoDTO.getDescricao());
-
-		return produto;
-	}
-
-	/*
-	 * Create Produto DTO object from model
-	 * 
-	 * @param ProdutoDTO
-	 * @param Produto
-	 * @return ProdutoDTO
-	 */
-	ProdutoDTO createProdutoDTO(ProdutoDTO produtoDTO, Produto produto) {
-		produtoDTO.setNome(produto.getNome());
-		produtoDTO.setDescricao(produto.getDescricao());
-		if (produto.getIdProdutoOpt().isPresent()) {
-			produtoDTO.setIdProduto(produto.getIdProdutoOpt().get());
-		}
-		return produtoDTO;
-	}
-
-	/*
-	 * Create ProdutoPai DTO object from model
-	 * 
-	 * @param ProdutoDTO
-	 * @param Produto
-	 * @return ProdutoDTO
-	 */
-	ProdutoDTO createProdutoPaiDTO(ProdutoDTO produtoDTO, Produto produto) {
-		if (produto.getProdutoPaiOpt().isPresent()) {
-			Produto produtoPai = produto.getProdutoPaiOpt().get();
-			ProdutoDTO produtoPaiDTO = new ProdutoDTO();
-			produtoPaiDTO.setNome(produtoPai.getNome());
-			produtoPaiDTO.setDescricao(produtoPai.getDescricao());
-			if (produtoPai.getIdProdutoOpt().isPresent()) {
-				produtoPaiDTO.setIdProduto(produtoPai.getIdProdutoOpt().get());
-			}
-			produtoDTO.setProdutoPai(produtoPaiDTO);
-		}
-		return produtoDTO;
 	}
 
 }

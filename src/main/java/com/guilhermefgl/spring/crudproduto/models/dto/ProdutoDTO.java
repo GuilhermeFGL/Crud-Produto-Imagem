@@ -1,10 +1,16 @@
 package com.guilhermefgl.spring.crudproduto.models.dto;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import com.guilhermefgl.spring.crudproduto.models.Imagem;
+import com.guilhermefgl.spring.crudproduto.models.Produto;
+import com.guilhermefgl.spring.crudproduto.models.services.ProdutoService;
 
 public class ProdutoDTO {
 	
@@ -84,6 +90,78 @@ public class ProdutoDTO {
 	 */
 	public void setImagens(List<Imagem> imagens) {
 		this.imagens = imagens;
+	}
+	
+	/*
+	 * Convert DTO to model class
+	 * 
+	 * @param produtoService
+	 * @param BindingResult
+	 * @return Produto
+	 * @throws ParseException
+	 */
+	public Produto toModel(ProdutoService produtoService, BindingResult result) throws ParseException {
+		Produto produto = new Produto();
+
+		if (getIdProduto() != null) {
+			Optional<Produto> produtoOpt = produtoService.getProduct(getIdProduto());
+			if (produtoOpt.isPresent()) {
+				produto = produtoOpt.get();
+			} else {
+				result.addError(new ObjectError("produto", "Produto não encontrado."));
+			}
+		}
+
+		if (getProdutoPai() != null) {
+			Optional<Produto> produtoOpt = produtoService.getProduct(getProdutoPai().getIdProduto());
+			if (produtoOpt.isPresent()) {
+				produto.setProdutoPai(produtoOpt.get());
+			} else {
+				result.addError(new ObjectError("produto", "Produto pai não encontrado."));
+			}
+		}
+		
+		produto.setNome(getNome());
+		produto.setDescricao(getDescricao());
+
+		return produto;
+	}
+
+	/*
+	 * Create Produto DTO object from model
+	 * 
+	 * @param ProdutoDTO
+	 * @param Produto
+	 * @return ProdutoDTO
+	 */
+	public ProdutoDTO createProdutoDTO(Produto produto) {
+		setNome(produto.getNome());
+		setDescricao(produto.getDescricao());
+		if (produto.getIdProdutoOpt().isPresent()) {
+			setIdProduto(produto.getIdProdutoOpt().get());
+		}
+		return this;
+	}
+
+	/*
+	 * Create ProdutoPai DTO object from model
+	 * 
+	 * @param ProdutoDTO
+	 * @param Produto
+	 * @return ProdutoDTO
+	 */
+	public ProdutoDTO createProdutoPaiDTO(Produto produto) {
+		if (produto.getProdutoPaiOpt().isPresent()) {
+			Produto produtoPai = produto.getProdutoPaiOpt().get();
+			ProdutoDTO produtoPaiDTO = new ProdutoDTO();
+			produtoPaiDTO.setNome(produtoPai.getNome());
+			produtoPaiDTO.setDescricao(produtoPai.getDescricao());
+			if (produtoPai.getIdProdutoOpt().isPresent()) {
+				produtoPaiDTO.setIdProduto(produtoPai.getIdProdutoOpt().get());
+			}
+			setProdutoPai(produtoPaiDTO);
+		}
+		return this;
 	}
 
 }

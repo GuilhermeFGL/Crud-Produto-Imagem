@@ -33,7 +33,7 @@ public class Produto implements Serializable {
 	@Column(name = "descricao", nullable = false)
 	private String descricao;
 	
-	@ManyToOne(fetch = FetchType.EAGER) // (?) EAGER = loop
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idProdutoPai")
 	private Produto produtoPai;
 	
