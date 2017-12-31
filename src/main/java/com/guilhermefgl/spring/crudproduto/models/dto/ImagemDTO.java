@@ -89,7 +89,7 @@ public class ImagemDTO {
 			if (produtoOpt.isPresent()) {
 				imagem.setProduto(produtoOpt.get());
 			} else {
-				result.addError(new ObjectError("produto", "Produto pai não encontrado."));
+				result.addError(new ObjectError("produto", "Produto não encontrado."));
 			}	
 		}
 		

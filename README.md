@@ -3,7 +3,8 @@
 # Crud Produto Imagem
 
 Aplicação Spring Bot para CRUD de Produtos e Imagens. 
-Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
+
+Projeto desenvolvido, executado e testado na IDE Spring Tool Suit, no Linux e Windows (64 bits).
 
 **Para rodar a aplicação use o comando:**
 ` mvn spring-boot:run `
@@ -17,12 +18,20 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
  [HEADER] Content-Type: application/json
 ```
 
+**Resposta**
+```
+[RESPONSE] {
+    "data": Data,
+    "errors": [ ] Error
+}
+```
+
 
 ### CRUD Produtos
 
 - Adicionar produto
 ```
-[POST] api/produto
+[POST] api/produtos
 [BODY] {
   "nome": string,
   "descricao": string,
@@ -88,7 +97,7 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 
 - **Adicionar imagem**
 ```
-[POST] api/imagem
+[POST] api/imagens
 [BODY] {
   "tipo": string,
   "produto": {
@@ -109,10 +118,10 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 
 - **Atualizar imagem**
 ```
-[PUT] api/imagens
+[PUT] api/imagens/{int imagemId}
 [BODY] {
-  "tipo": string,    *// opcional*
-  "produto": {       *// opcional*
+  "tipo": string,
+  "produto": {
     "idProduto": int
   }
 }

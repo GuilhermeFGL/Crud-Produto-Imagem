@@ -19,7 +19,7 @@ public class ProdutoDTO {
 	private String nome;
 	private String descricao;
 	private ProdutoDTO produtoPai;
-	private List<ImagemDTO> imagensDTO;
+	private List<ImagemDTO> imagens;
 	
 	/**
 	 * @return the idProduto
@@ -82,15 +82,15 @@ public class ProdutoDTO {
 	/**
 	 * @return the imagensDTO
 	 */
-	public List<ImagemDTO> getImagensDTO() {
-		return imagensDTO;
+	public List<ImagemDTO> getImagens() {
+		return imagens;
 	}
 
 	/**
 	 * @param imagens the imagensDTO to set
 	 */
-	public void setImagensDTO(List<ImagemDTO> imagensDTO) {
-		this.imagensDTO = imagensDTO;
+	public void setImagens(List<ImagemDTO> imagens) {
+		this.imagens = imagens;
 	}
 	
 	/*
@@ -173,7 +173,7 @@ public class ProdutoDTO {
 	public ProdutoDTO createImagensDTO(ImagemService imagemService, Produto produto) {
 		List<ImagemDTO> imagensDTO = new ArrayList<ImagemDTO>();
 		imagemService.listProdutoImages(produto).forEach(imagem -> imagensDTO.add(new ImagemDTO().createImagemDTO(imagem)));
-		setImagensDTO(imagensDTO);
+		setImagens(imagensDTO);
 		return this;
 	}
 
