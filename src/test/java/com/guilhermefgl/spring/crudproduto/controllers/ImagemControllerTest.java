@@ -3,6 +3,7 @@ package com.guilhermefgl.spring.crudproduto.controllers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -52,7 +53,7 @@ public class ImagemControllerTest {
 	
 	@Test
 	@SuppressWarnings("serial")
-	public void addTest_valid() throws Exception {
+	public void postTest_valid() throws Exception {
 		Imagem imagem = new Imagem() {{
 			setTipo("img teste");
 			setProduto(new Produto() {{
@@ -68,11 +69,10 @@ public class ImagemControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.errors").isEmpty());
-		
 	}
 	
 	@Test
-	public void addTest_invalid() throws Exception {
+	public void postTest_invalid() throws Exception {
 		BDDMockito.given(imagemService.getImagem(Mockito.anyInt())).willReturn(Optional.empty());
 
 		mvc.perform(MockMvcRequestBuilders.post(IMAGEM_BASE)
@@ -81,7 +81,46 @@ public class ImagemControllerTest {
 	}
 	
 	@Test
-	public void testRemoverLancamento() throws Exception {
+	public void getTest_valid()  throws Exception {
+		BDDMockito.given(imagemService.listImagens()).willReturn(new ArrayList<Imagem>());
+		
+		mvc.perform(MockMvcRequestBuilders.get(IMAGEM_BASE)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+	}
+	
+	@Test
+	public void getWithProdutoTest()  throws Exception {
+		BDDMockito.given(imagemService.listImagens()).willReturn(new ArrayList<Imagem>());
+		
+		mvc.perform(MockMvcRequestBuilders.get(IMAGEM_BASE + "?produto=1")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	@SuppressWarnings("serial")
+	public void putTest() throws Exception {
+		Imagem imagem = new Imagem() {{
+			setTipo("img teste - update");
+			setProduto(new Produto() {{
+				setIdProduto(1);
+			}});
+		}};
+		BDDMockito.given(imagemService.getImagem(Mockito.anyInt())).willReturn(Optional.of(new Imagem()));
+		BDDMockito.given(imagemService.save(Mockito.any(Imagem.class))).willReturn(imagem);
+
+		mvc.perform(MockMvcRequestBuilders.put(IMAGEM_BASE + IMAGEM_ID)
+				.content(toJson(imagem))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.errors").isEmpty());
+	}
+	
+	@Test
+	public void deleteTest() throws Exception {
 		BDDMockito.given(imagemService.getImagem(Mockito.anyInt())).willReturn(Optional.of(new Imagem()));
 
 		mvc.perform(MockMvcRequestBuilders.delete(IMAGEM_BASE + IMAGEM_ID)

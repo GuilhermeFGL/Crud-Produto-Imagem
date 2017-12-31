@@ -3,6 +3,7 @@ package com.guilhermefgl.spring.crudproduto.controllers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guilhermefgl.spring.crudproduto.models.Imagem;
 import com.guilhermefgl.spring.crudproduto.models.Produto;
 import com.guilhermefgl.spring.crudproduto.models.services.ProdutoService;
 
@@ -90,6 +92,96 @@ public class ProdutoControllerTest {
 		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE + PRODUTO_ID).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.errors").value("Produto não encontrado"));
+	}
+	
+	@Test
+	@SuppressWarnings("serial")
+	public void getWithImagensTest_valid() throws Exception {
+		BDDMockito.given(produtoService.getProduct(Mockito.anyInt()))
+				.willReturn(Optional.of(new Produto() {{
+					setIdProduto(PRODUTO_ID);
+					setNome("Teste");
+					setDescricao("produto teste");
+					setImagens(new ArrayList<Imagem>());
+				}}));
+
+		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE + PRODUTO_ID + "/imagens")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.data.idProduto").value(PRODUTO_ID));
+	}
+	
+	@Test
+	@SuppressWarnings("serial")
+	public void getWithParentTest_valid() throws Exception {
+		BDDMockito.given(produtoService.getProduct(Mockito.anyInt()))
+				.willReturn(Optional.of(new Produto() {{
+					setIdProduto(PRODUTO_ID);
+					setNome("Teste");
+					setDescricao("produto teste");
+					setProdutoPai(new Produto());
+				}}));
+
+		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE + PRODUTO_ID + "/pais")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.data.idProduto").value(PRODUTO_ID));
+	}
+	
+	@Test
+	public void getWithSonsTest() throws Exception {
+		BDDMockito.given(produtoService.getProduct(PRODUTO_ID)).willReturn(Optional.of(new Produto()));
+		BDDMockito.given(produtoService.listSonsProducts(Mockito.any(Produto.class))).willReturn(new ArrayList<Produto>());
+
+		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE + PRODUTO_ID + "/filhos")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void getListTest() throws Exception {
+		BDDMockito.given(produtoService.listProducts()).willReturn(new ArrayList<Produto>());
+
+		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void getListWithImagesTest() throws Exception {
+		BDDMockito.given(produtoService.listProducts()).willReturn(new ArrayList<Produto>());
+
+		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE + "/imagens")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void getListWithParentTest() throws Exception {
+		BDDMockito.given(produtoService.listProducts()).willReturn(new ArrayList<Produto>());
+
+		mvc.perform(MockMvcRequestBuilders.get(PRODUTO_BASE + "/pais")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	@SuppressWarnings("serial")
+	public void putTest() throws Exception {
+		Produto produto = new Produto() {{
+			setNome("Teste");
+			setDescricao("produto teste");
+		}};
+		BDDMockito.given(produtoService.getProduct(PRODUTO_ID)).willReturn(Optional.of(new Produto()));
+		BDDMockito.given(produtoService.save(Mockito.any(Produto.class))).willReturn(produto);
+
+		mvc.perform(MockMvcRequestBuilders.put(PRODUTO_BASE + PRODUTO_ID)
+				.content(toJson(produto))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.errors").isEmpty());
+		
 	}
 	
 	@Test
