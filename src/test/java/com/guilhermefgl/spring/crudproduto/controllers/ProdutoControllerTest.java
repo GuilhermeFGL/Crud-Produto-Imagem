@@ -41,7 +41,7 @@ public class ProdutoControllerTest {
 	
 	@Test
 	@SuppressWarnings("serial")
-	public void addTest_valid() throws Exception {
+	public void postTest_valid() throws Exception {
 		Produto produto = new Produto() {{
 			setNome("Teste");
 			setDescricao("produto teste");
@@ -59,7 +59,7 @@ public class ProdutoControllerTest {
 	}
 	
 	@Test
-	public void addTest_invalid() throws Exception {
+	public void postTest_invalid() throws Exception {
 		BDDMockito.given(produtoService.getProduct(Mockito.anyInt())).willReturn(Optional.empty());
 
 		mvc.perform(MockMvcRequestBuilders.post(PRODUTO_BASE)
@@ -93,7 +93,7 @@ public class ProdutoControllerTest {
 	}
 	
 	@Test
-	public void testRemoverLancamento() throws Exception {
+	public void deleteTest() throws Exception {
 		BDDMockito.given(produtoService.getProduct(Mockito.anyInt())).willReturn(Optional.of(new Produto()));
 
 		mvc.perform(MockMvcRequestBuilders.delete(PRODUTO_BASE + PRODUTO_ID)

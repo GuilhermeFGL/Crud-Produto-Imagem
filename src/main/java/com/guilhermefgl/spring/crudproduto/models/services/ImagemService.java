@@ -1,6 +1,5 @@
 package com.guilhermefgl.spring.crudproduto.models.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +10,9 @@ import com.guilhermefgl.spring.crudproduto.models.Imagem;
 import com.guilhermefgl.spring.crudproduto.models.Produto;
 import com.guilhermefgl.spring.crudproduto.models.dao.ImagemDAO;
 import com.guilhermefgl.spring.crudproduto.models.repositories.ImagemRepository;
-import com.guilhermefgl.spring.crudproduto.models.repositories.ProdutoRepository;
 
 @Service
 public class ImagemService implements ImagemDAO {
-	
-	@Autowired
-	private ProdutoRepository produtoRepository;
 	
 	@Autowired
 	private ImagemRepository imagemRepository;
@@ -33,13 +28,8 @@ public class ImagemService implements ImagemDAO {
 	}
 
 	@Override
-	public List<Imagem> listProdutoImages(Integer produtoId) {
-		Optional<Produto> produto = Optional.ofNullable(produtoRepository.findByIdProduto(produtoId));
-		if (produto.isPresent()) {
-			return imagemRepository.findByProduto(produto.get());
-		} else {
-			return new ArrayList<Imagem>();
-		}
+	public List<Imagem> listProdutoImages(Produto produto) {
+		return imagemRepository.findByProduto(produto);
 	}
 
 	@Override

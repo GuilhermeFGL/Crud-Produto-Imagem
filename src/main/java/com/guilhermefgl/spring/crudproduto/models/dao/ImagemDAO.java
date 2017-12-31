@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.guilhermefgl.spring.crudproduto.models.Imagem;
+import com.guilhermefgl.spring.crudproduto.models.Produto;
 
 public interface ImagemDAO {
 	
@@ -25,10 +26,10 @@ public interface ImagemDAO {
 	/*
 	 * List Imagens from Produto id
 	 * 
-	 * @param produtoId
+	 * @param Produto
 	 * @return List<Imagem>
 	 */
-	List<Imagem> listProdutoImages(Integer produtoId);
+	List<Imagem> listProdutoImages(Produto produto);
 	
 	/*
 	 * Persist product object

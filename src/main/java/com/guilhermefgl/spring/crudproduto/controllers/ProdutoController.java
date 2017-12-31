@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.guilhermefgl.spring.crudproduto.util.Response;
 import com.guilhermefgl.spring.crudproduto.models.Produto;
 import com.guilhermefgl.spring.crudproduto.models.dto.ProdutoDTO;
+import com.guilhermefgl.spring.crudproduto.models.services.ImagemService;
 import com.guilhermefgl.spring.crudproduto.models.services.ProdutoService;
 
 @RestController
@@ -34,6 +35,9 @@ public class ProdutoController {
 
 	@Autowired
 	private ProdutoService produtoService;
+	
+	@Autowired
+	private ImagemService imagemService;
 
 	/**
 	 * POST product
@@ -69,6 +73,21 @@ public class ProdutoController {
 		Response<List<ProdutoDTO>> response = new Response<List<ProdutoDTO>>();
 		List<ProdutoDTO> produtosDTO = new ArrayList<ProdutoDTO>();
 		produtoService.listProducts().forEach(produto -> produtosDTO.add(new ProdutoDTO().createProdutoDTO(produto)));
+
+		response.setData(produtosDTO);
+		return ResponseEntity.ok(response);
+	}
+	
+	/**
+	 * GET list of produtos with imagens 
+	 * 
+	 * @return ResponseEntity<Response<ProdutoDTO>>
+	 */
+	@GetMapping("/imagens")
+	public ResponseEntity<Response<List<ProdutoDTO>>> listWithImages() {
+		Response<List<ProdutoDTO>> response = new Response<List<ProdutoDTO>>();
+		List<ProdutoDTO> produtosDTO = new ArrayList<ProdutoDTO>();
+		produtoService.listProducts().forEach(produto -> produtosDTO.add(new ProdutoDTO().createProdutoDTO(produto).createImagensDTO(imagemService, produto)));
 
 		response.setData(produtosDTO);
 		return ResponseEntity.ok(response);
@@ -109,6 +128,28 @@ public class ProdutoController {
 		} else {
 			response.setData(new ProdutoDTO().createProdutoDTO(produto.get()));
 			return ResponseEntity.ok(response);
+		}
+	}
+	
+	/**
+	 * GET list imagens from produto
+	 * 
+	 * @param produtoPaiId
+	 * @return ResponseEntity<Response<List<ProdutoDTO>>>
+	 */
+	@GetMapping(value = "/{id}/imagens")
+	public ResponseEntity<Response<ProdutoDTO>> getImagens(@PathVariable("id") Integer produtoId) {
+		Response<ProdutoDTO> response = new Response<ProdutoDTO>();
+		ProdutoDTO produtoDTO = new ProdutoDTO();
+		
+		Optional<Produto> produto = produtoService.getProduct(produtoId);
+		if(produto.isPresent()) {
+			produtoDTO.createProdutoDTO(produto.get()).createImagensDTO(imagemService, produto.get());
+			response.setData(produtoDTO);
+			return ResponseEntity.ok(response);
+		} else {
+			response.setErrors(Arrays.asList("Produto pai não encontrado"));
+			return ResponseEntity.badRequest().body(response);
 		}
 	}
 

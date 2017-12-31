@@ -1,6 +1,7 @@
 package com.guilhermefgl.spring.crudproduto.models.dto;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +9,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
-import com.guilhermefgl.spring.crudproduto.models.Imagem;
 import com.guilhermefgl.spring.crudproduto.models.Produto;
+import com.guilhermefgl.spring.crudproduto.models.services.ImagemService;
 import com.guilhermefgl.spring.crudproduto.models.services.ProdutoService;
 
 public class ProdutoDTO {
@@ -18,7 +19,7 @@ public class ProdutoDTO {
 	private String nome;
 	private String descricao;
 	private ProdutoDTO produtoPai;
-	private List<Imagem> imagens;
+	private List<ImagemDTO> imagensDTO;
 	
 	/**
 	 * @return the idProduto
@@ -79,17 +80,17 @@ public class ProdutoDTO {
 	}
 
 	/**
-	 * @return the imagens
+	 * @return the imagensDTO
 	 */
-	public List<Imagem> getImagens() {
-		return imagens;
+	public List<ImagemDTO> getImagensDTO() {
+		return imagensDTO;
 	}
 
 	/**
-	 * @param imagens the imagens to set
+	 * @param imagens the imagensDTO to set
 	 */
-	public void setImagens(List<Imagem> imagens) {
-		this.imagens = imagens;
+	public void setImagensDTO(List<ImagemDTO> imagensDTO) {
+		this.imagensDTO = imagensDTO;
 	}
 	
 	/*
@@ -159,6 +160,20 @@ public class ProdutoDTO {
 			}
 			setProdutoPai(produtoPaiDTO);
 		}
+		return this;
+	}
+	
+	/*
+	 *  Create List ImagemDTO from model
+	 *  
+	 *  @param ImagemService
+	 *  @param Produto
+	 *  @return ProdutoDTO
+	 */
+	public ProdutoDTO createImagensDTO(ImagemService imagemService, Produto produto) {
+		List<ImagemDTO> imagensDTO = new ArrayList<ImagemDTO>();
+		imagemService.listProdutoImages(produto).forEach(imagem -> imagensDTO.add(new ImagemDTO().createImagemDTO(imagem)));
+		setImagensDTO(imagensDTO);
 		return this;
 	}
 

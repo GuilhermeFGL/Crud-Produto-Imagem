@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guilhermefgl.spring.crudproduto.models.Imagem;
@@ -69,10 +70,21 @@ public class ImagemController {
 	 * @return ResponseEntity<Response<ImagemDTO>>
 	 */
 	@GetMapping
-	public ResponseEntity<Response<List<ImagemDTO>>> list() {
+	public ResponseEntity<Response<List<ImagemDTO>>> list(@RequestParam(value = "produto", defaultValue = "0") Integer produtoId) {
 		Response<List<ImagemDTO>> response = new Response<List<ImagemDTO>>();
 		List<ImagemDTO> imagensDTO = new ArrayList<ImagemDTO>();
-		imagemService.listImagens().forEach(imagem -> imagensDTO.add(new ImagemDTO().createImagemDTO(imagem)));
+		
+		if (produtoId != null && produtoId > 0) {
+			Optional<Produto> produto = produtoService.getProduct(produtoId);
+			if (produto.isPresent()) {
+				imagemService.listProdutoImages(produto.get()).forEach(imagem -> imagensDTO.add(new ImagemDTO().createImagemDTO(imagem)));	
+			} else {
+				response.getErrors().add("Produto não encontrado");
+				return ResponseEntity.badRequest().body(response);
+			}
+		} else { 
+			imagemService.listImagens().forEach(imagem -> imagensDTO.add(new ImagemDTO().createImagemDTO(imagem)));
+		}
 
 		response.setData(imagensDTO);
 		return ResponseEntity.ok(response);
@@ -122,7 +134,7 @@ public class ImagemController {
 		Optional<Imagem> imagem = imagemService.getImagem(idImagem);
 
 		if (!imagem.isPresent()) {
-			response.getErrors().add("Imagem não encontrado");
+			response.getErrors().add("Imagem não encontrada");
 			return ResponseEntity.badRequest().body(response);
 		}
 

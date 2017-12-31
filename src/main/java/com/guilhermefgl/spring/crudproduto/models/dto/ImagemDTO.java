@@ -109,11 +109,6 @@ public class ImagemDTO {
 		if (imagem.getIdImagemOpt().isPresent()) {
 			setIdImagem(imagem.getIdImagemOpt().get());
 		}
-//		if (imagem.getProdutoOpt().isPresent()) {
-//			setProduto(new ProdutoDTO() {{
-//				setIdProduto(imagem.getProdutoOpt().get().getIdProduto());
-//			}});
-//		}
 		return this;
 	}
 
