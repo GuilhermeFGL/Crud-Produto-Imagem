@@ -12,7 +12,7 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 ` mvn test `
 
 **URL base:**
-```HTTP
+```
  http://localhost:8080/
  [HEADER] Content-Type: application/json
 ```
@@ -21,7 +21,7 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 ### CRUD Produtos
 
 - Adicionar produto
-```HTTP
+```
 [POST] api/produto
 [BODY] {
   "nome": string,
@@ -33,42 +33,42 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 ```
 
 - **Listar produtos**
-```HTTP
+```
 [GET] api/produtos
 ```
 
 - **Listar produtos incluindo imagens**
-```HTTP
+```
 [GET] api/produtos/imagens
 ```
 
 - **Listar produtos incluindo produto pai**
-```HTTP
+```
 [GET] api/produtos/pais
 ```
 
 - **Pesquisar produto**
-```HTTP
+```
 [GET] api/{int produtoId}
 ```
 
 - **Pesquisar produto incluindo imagens**
-```HTTP
+```
 [GET] api/{int produtoId}/imagens
 ```
 
 - **Pesquisar produto inlucindo produto pai**
-```HTTP
+```
 [GET] api/{int produtoId}/pais
 ```
 
 - **Listar produtos filhos por id de produto pai**
-```HTTP
+```
 [GET] api/produtos/{int produtoPaiId}/filhos
 ```
 
 - **Atualizar produto**
-```HTTP
+```
 [PUT] api/produtos/{int produtoId}
 [BODY] {
   "nome": string,      *// opcional*
@@ -80,14 +80,14 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 ```
 
 - **Deletar produto**
-```HTTP
+```
 [DELETE] api/produtos/{int produtoId}
 ```
 
 ### CRUD Imagens
 
 - **Adicionar imagem**
-```HTTP
+```
 [POST] api/imagem
 [BODY] {
   "tipo": string,
@@ -98,17 +98,17 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 ```
 
 - **Listar imagens**
-```HTTP
+```
 [GET] api/imagens
 ```
 
 - **Listar imagens de um produto**
-```HTTP
+```
 [] api/imagens?produto={int produtoId}
 ```
 
 - **Atualizar imagem**
-```HTTP
+```
 [PUT] api/imagens
 [BODY] {
   "tipo": string,    *// opcional*
@@ -119,9 +119,9 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit
 ```
 
 - **Deletar imagem**
-```HTTP
+```
 [DELETE] api/imagens/{int imagemId}
 ```
 
 
-Autoria [GuilhermeFGL](https://www.linkedin.com/in/guilherme-faria-da-gama-lima-37baa647/) :neckbeard:
+Autoria :neckbeard: [GuilhermeFGL](https://www.linkedin.com/in/guilherme-faria-da-gama-lima-37baa647/)
