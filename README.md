@@ -35,7 +35,7 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit, no Linux e Wi
 [BODY] {
   "nome": string,
   "descricao": string,
-  "produtoPai": {      *// opcional*
+  "produtoPai": {      // opcional
     "idProduto": int
   }
 }
@@ -82,7 +82,7 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit, no Linux e Wi
 [BODY] {
   "nome": string,
   "descricao": string,
-  "produtoPai": {      *// opcional*
+  "produtoPai": {      // opcional
     "idProduto": int
   }
 }
