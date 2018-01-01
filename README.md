@@ -80,8 +80,8 @@ Projeto desenvolvido, executado e testado na IDE Spring Tool Suit, no Linux e Wi
 ```
 [PUT] api/produtos/{int produtoId}
 [BODY] {
-  "nome": string,      *// opcional*
-  "descricao": string, *// opcional*
+  "nome": string,
+  "descricao": string,
   "produtoPai": {      *// opcional*
     "idProduto": int
   }
